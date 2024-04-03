@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import daopack.Dao1;
 import dtopack.dto1;
+import dtopack.taskdto;
 @WebServlet("/Login")
 public class Login extends HttpServlet{
 	@Override
@@ -27,6 +29,10 @@ public class Login extends HttpServlet{
 			{
 				//login success
 				// create session and set data
+			//get all the tasks related to user id
+			List<taskdto> tasks=dao.getAllTaskById(dto.getid());
+			req.setAttribute("tasks", tasks);
+			
 			req.getSession().setAttribute("dto1", dto);
 			req.getRequestDispatcher("home.jsp").include(req, resp);
 			}

@@ -28,7 +28,11 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws S
 	try {
 		int res=dao.createTask(task);
 		if(res>0)
-		{resp.getWriter().println("task created succesfully");}
+		{
+			dto1 d=(dto1) req.getSession().getAttribute("dto1");
+			req.setAttribute("tasks", dao.getAllTaskById(d.getid()));
+			req.getRequestDispatcher("home.jsp").include(req, resp);
+		}
 		else
 		{resp.getWriter().println("failled");}
 	} catch (Throwable e) {

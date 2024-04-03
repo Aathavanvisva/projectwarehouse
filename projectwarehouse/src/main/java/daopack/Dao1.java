@@ -6,6 +6,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -76,6 +78,21 @@ public int createTask(taskdto task) throws Throwable
 	ps.setInt(7, task.getUserid());
 	int res=ps.executeUpdate();
 	return res;
+}
+public List<taskdto> getAllTaskById(int userid) throws Throwable
+{
+	Connection cn=Dao1.getConnection();
+	PreparedStatement ps=cn.prepareStatement("select * from task where userid=?");
+	ps.setInt(1, userid);
+	ResultSet rs=ps.executeQuery();
+	List<taskdto> tasks=new ArrayList<>();
+	while(rs.next())
+	{
+		taskdto task=new taskdto(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getInt(7));
+		tasks.add(task);
+	}
+	
+	return tasks;
 }
 
 }

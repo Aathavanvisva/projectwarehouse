@@ -20,6 +20,17 @@ public class taskdto {
 		this.taskstatus = taskstatus;
 		this.userid = userid;
 	}
+	public taskdto(int taskid, String tasktitle, String taskdescription, String taskpriority, String taskduedate,
+			String taskstatus) {
+		super();
+		this.taskid = taskid;
+		this.tasktitle = tasktitle;
+		this.taskdescription = taskdescription;
+		this.taskpriority = taskpriority;
+		this.taskduedate = taskduedate;
+		this.taskstatus = taskstatus;
+		
+	}
 	public int getTaskid() {
 		return taskid;
 	}
