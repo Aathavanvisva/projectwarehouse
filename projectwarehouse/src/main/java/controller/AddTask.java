@@ -14,18 +14,19 @@ import dtopack.taskdto;
 @WebServlet("/addtask")
 public class AddTask extends HttpServlet{
 @Override
-protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	int taskid =Integer.parseInt(req.getParameter("taskid"));
+protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	
 	String tasktitle=req.getParameter("tasktitle");
 	String taskdescription=req.getParameter("taskdescription");
 	String taskpriority=req.getParameter("taskpriority");
 	String taskduedate=req.getParameter("taskduedate");
-//	String taskstatus=req.getParameter("taskstatus");
+
 	dto1 dto=(dto1)req.getSession().getAttribute("dto1");
 	int userid =dto.getid();
-	taskdto task=new taskdto(taskid, tasktitle, taskdescription, taskpriority, taskduedate, taskduedate, userid);
+	
 	Dao1 dao=new Dao1();
 	try {
+		taskdto task=new taskdto(dao.getTaskId(), tasktitle, taskdescription, taskpriority ,taskduedate,"pending", userid);
 		int res=dao.createTask(task);
 		if(res>0)
 		{

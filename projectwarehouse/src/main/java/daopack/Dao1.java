@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
 
+import com.mysql.cj.protocol.Resultset;
 import com.mysql.cj.xdevapi.Result;
 
 import dtopack.dto1;
@@ -70,11 +71,11 @@ public int createTask(taskdto task) throws Throwable
 	Connection cn=getConnection();
 	PreparedStatement ps =cn.prepareStatement("insert into task value (?,?,?,?,?,?,?)");
 	ps.setInt(1, task.getTaskid());
-	ps.setString(2, task.getTaskdescription());
-	ps.setString(3, task.getTaskpriority());
-	ps.setString(4, task.getTaskduedate());
-	ps.setString(5, task.getTaskstatus());
-	ps.setString(6, task.getTasktitle());
+	ps.setString(2, task.getTasktitle());
+	ps.setString(3, task.getTaskdescription());
+	ps.setString(4, task.getTaskpriority());
+	ps.setString(5, task.getTaskduedate());
+	ps.setString(6, task.getTaskstatus());
 	ps.setInt(7, task.getUserid());
 	int res=ps.executeUpdate();
 	return res;
@@ -94,5 +95,73 @@ public List<taskdto> getAllTaskById(int userid) throws Throwable
 	
 	return tasks;
 }
+
+public int deletetask (int tid) throws Throwable
+{
+Connection cn=getConnection();
+PreparedStatement ps=cn.prepareStatement("delete from task where taskid=?");
+ps.setInt(1, tid);
+int res=ps.executeUpdate();
+return res;
+}
+
+public int getTaskId() throws Throwable
+{
+	Connection cn=Dao1.getConnection();
+	PreparedStatement ps=cn.prepareStatement("select max(taskid) from task");
+	ResultSet rs=ps.executeQuery();
+	if(rs.next())
+	{
+		int id=rs.getInt(1);
+		return id+1;
+	}
+	else
+	{
+		return 1;
+	}
+	
+}
+
+public int getUserId() throws Throwable
+{
+	Connection cn=Dao1.getConnection();
+	PreparedStatement ps=cn.prepareStatement("select max(userid) from user");
+	ResultSet rs=ps.executeQuery();
+	if(rs.next())
+	{
+		int id=rs.getInt(1);
+		return id+1;
+	}
+	else
+	{
+		return 1;
+	}
+}
+public taskdto findTaskById(int taskid) throws Throwable
+{
+	Connection cn=getConnection();
+	PreparedStatement ps=cn.prepareStatement("select * from task where taskid=?");
+	ps.setInt(1, taskid);
+	ResultSet rs = ps.executeQuery();
+	rs.next();
+	taskdto task=new taskdto(taskid,rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),taskid);
+	return task;
+}
+
+public int updateTask(taskdto task) throws Throwable
+{
+	Connection cn=getConnection();
+	PreparedStatement ps=cn.prepareStatement("update task set tasktittle=?,taskdescription=?,taskpriority=?,taskduedate=?,taskstatus=? where taskid=?");
+	ps.setString(1, task.getTasktitle());
+	ps.setString(2, task.getTaskdescription());
+	ps.setString(3, task.getTaskpriority());
+	ps.setString(4, task.getTaskduedate());
+	ps.setString(5, task.getTaskstatus());
+	ps.setInt(6,task.getTaskid());
+	int res=ps.executeUpdate();
+	return res;
+}
+
+
 
 }

@@ -18,16 +18,18 @@ import dtopack.dto1;
 public class SaveUser extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		int id = Integer.parseInt(req.getParameter("id"));
+		
 		String name = req.getParameter("name");
 		String email = req.getParameter("email");
 		long contact = Long.parseLong(req.getParameter("contact"));
 		String password = req.getParameter("password");
 		Part imagePart = req.getPart("image");
 		byte[] imagebytes = imagePart.getInputStream().readAllBytes();
-		dto1 dto = new dto1(id,name, email, contact,password,imagebytes);
+		
 		Dao1 dao = new Dao1();
+		dto1 dto;
 		try {
+			 dto = new dto1(dao.getUserId(),name, email, contact,password,imagebytes);
 			int res=dao.saveUser(dto);
 			if (res>0)
 			{
